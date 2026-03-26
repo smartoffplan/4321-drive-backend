@@ -1,11 +1,11 @@
 steps:
   # 1. Build the container image
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'gcr.io/$PROJECT_ID/$_SERVICE_NAME:$COMMIT_SHA', '.']
+    args: ['build', '-t', 'gcr.io/$_PROJECTID/$_SERVICE:$COMMIT_SHA', '.']
 
   # 2. Push the container image to Container Registry
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'gcr.io/$PROJECT_ID/$_SERVICE_NAME:$COMMIT_SHA']
+    args: ['push', 'gcr.io/$_PROJECTID/$_SERVICE:$COMMIT_SHA']
 
   # 3. Deploy container image to Cloud Run
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
@@ -13,9 +13,9 @@ steps:
     args:
       - 'run'
       - 'deploy'
-      - '$_SERVICE_NAME'
+      - '$_SERVICE'
       - '--image'
-      - 'gcr.io/$PROJECT_ID/$_SERVICE_NAME:$COMMIT_SHA'
+      - 'gcr.io/$_PROJECTID/$_SERVICE:$COMMIT_SHA'
       - '--region'
       - '$_REGION'
       - '--allow-unauthenticated'
@@ -24,10 +24,11 @@ steps:
       - '--update-env-vars'
       - 'NODE_ENV=production'
 
-# Standard Substitutions (can be overwritten in GCP Trigger settings)
+# Standard Substitutions (must begin with _ and use ONLY uppercase/numbers)
 substitutions:
-  _SERVICE_NAME: '4321-drive-backend'
+  _SERVICE: '4321-drive-backend'
   _REGION: 'us-central1'
+  _PROJECTID: 'YOUR_PROJECT_ID_GOES_HERE'
 
 options:
   logging: CLOUD_LOGGING_ONLY
