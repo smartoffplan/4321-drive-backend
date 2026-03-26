@@ -4,3 +4,7 @@ logs/
 *.log
 .DS_Store
 uploads/
+
+4321-drive-backend-instructions.md
+API_DOCUMENTATION.md
+walkthrough.md
