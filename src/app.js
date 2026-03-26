@@ -31,6 +31,7 @@ const allowedOrigins = [
   "http://127.0.0.1:3000",
   "http://localhost:5130",
   "http://127.0.0.1:5130",
+  "https://drive-4321-backend-1647851889.me-central1.run.app",
 ];
 app.use(
   cors({
