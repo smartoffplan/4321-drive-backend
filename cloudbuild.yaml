@@ -26,9 +26,9 @@ steps:
 
 # Standard Substitutions (must begin with _ and use ONLY uppercase/numbers)
 substitutions:
-  _SERVICE: '4321-drive-backend'
-  _REGION: 'us-central1'
-  _PROJECTID: 'YOUR_PROJECT_ID_GOES_HERE'
+  _SERVICE: 'drive-4321-backend'
+  _REGION: 'me-central1'
+  _PROJECTID: 'drive-backend-491401'
 
 options:
   logging: CLOUD_LOGGING_ONLY
