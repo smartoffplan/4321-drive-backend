@@ -14,6 +14,10 @@ const swaggerOptions = {
     },
     servers: [
       {
+        url: '/api/v1',
+        description: 'Current server (relative)',
+      },
+      {
         url: `http://localhost:${env.PORT}/api/v1`,
         description: 'Development server',
       },
