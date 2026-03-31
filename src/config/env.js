@@ -4,7 +4,8 @@ const path = require('path');
 dotenv.config({ path: path.resolve(__dirname, '../../.env') });
 
 const env = {
-  PORT: process.env.PORT || 5000,
+  // Cloud Run provides PORT=8080 by default. This ensures we bind to the correct one.
+  PORT: process.env.PORT || 8080,
   NODE_ENV: process.env.NODE_ENV || 'development',
   MONGODB_URI: process.env.MONGODB_URI || 'mongodb://localhost:27017/4321-drive',
 

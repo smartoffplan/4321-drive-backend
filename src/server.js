@@ -4,7 +4,7 @@ const connectDB = require("./config/db");
 const logger = require("./utils/logger");
 
 const startServer = async () => {
-  const port = env.PORT || 8080;
+  const port = env.PORT;
   
   // Start Express server
   const server = app.listen(port, () => {

@@ -35,13 +35,13 @@ const transports = [
   }),
 ];
 
-// File logging in production
-if (env.isProd()) {
-  transports.push(
-    new winston.transports.File({ filename: 'logs/error.log', level: 'error' }),
-    new winston.transports.File({ filename: 'logs/combined.log' })
-  );
-}
+// Cloud Run captures stdout/stderr, so file logging is unnecessary and can cause crashes if the FS is read-only or folders missing.
+// if (env.isProd()) {
+//   transports.push(
+//     new winston.transports.File({ filename: 'logs/error.log', level: 'error' }),
+//     new winston.transports.File({ filename: 'logs/combined.log' })
+//   );
+// }
 
 const logger = winston.createLogger({
   level: env.isDev() ? 'debug' : 'info',
