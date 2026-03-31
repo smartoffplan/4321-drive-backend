@@ -4,21 +4,20 @@ const connectDB = require("./config/db");
 const logger = require("./utils/logger");
 
 const startServer = async () => {
-  try {
-    // Connect to MongoDB
-    await connectDB();
-
-    // Start Express server
-    app.listen(env.PORT, () => {
-      logger.info(
-        `🚀 4321 Drive Backend running on port ${env.PORT} [${env.NODE_ENV}]`,
-      );
-      logger.info(`   Health: http://localhost:${env.PORT}/api/v1/health`);
+  const port = env.PORT || 8080;
+  
+  // Start Express server
+  const server = app.listen(port, () => {
+    logger.info(
+      `🚀 4321 Drive Backend running on port ${port} [${env.NODE_ENV}]`,
+    );
+    logger.info(`   Health: http://localhost:${port}/api/v1/health`);
+    
+    // Connect to MongoDB after server starts
+    connectDB().catch(error => {
+      logger.error("Failed to connect to MongoDB on startup:", error);
     });
-  } catch (error) {
-    logger.error("Failed to start server:", error);
-    process.exit(1);
-  }
+  });
 };
 
 // Handle unhandled rejections

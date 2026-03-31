@@ -16,12 +16,8 @@ COPY src/ ./src/
 # Set environment variables
 ENV NODE_ENV=production
 
-# The port Cloud Run will use
-ARG PORT=5130
-ENV PORT=${PORT}
-
-# Expose the port
-EXPOSE ${PORT}
+# Expose the port Cloud Run will provide
+EXPOSE 8080
 
 # Start the application
 CMD ["node", "src/server.js"]
