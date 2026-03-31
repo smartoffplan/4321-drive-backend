@@ -32,6 +32,8 @@ const allowedOrigins = [
   "http://127.0.0.1:3000",
   "http://localhost:5130",
   "http://127.0.0.1:5130",
+  "http://localhost:8080",
+  "http://127.0.0.1:8080",
   "https://drive-4321-backend-1647851889.me-central1.run.app",
   "https://4321-drive.vercel.app",
 ];
