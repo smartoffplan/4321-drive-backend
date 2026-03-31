@@ -16,8 +16,8 @@ COPY src/ ./src/
 # Set environment variables
 ENV NODE_ENV=production
 
-# Default port for Cloud Run
-ARG PORT=8080
+# The port Cloud Run will use
+ARG PORT=5130
 ENV PORT=${PORT}
 
 # Expose the port
