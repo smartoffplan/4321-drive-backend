@@ -19,5 +19,5 @@ ENV NODE_ENV=production
 # Expose the port Cloud Run will provide
 EXPOSE 8080
 
-# Start the application
-CMD ["node", "src/server.js"]
+# Start the master diagnostic server (Temporary for debugging)
+CMD ["node", "src/debug-server.js"]
