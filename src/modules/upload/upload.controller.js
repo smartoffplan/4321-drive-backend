@@ -1,5 +1,5 @@
 const { PutObjectCommand } = require("@aws-sdk/client-s3");
-const { v4: uuidv4 } = require("uuid");
+const crypto = require("crypto");
 const s3 = require("../../config/s3");
 const logger = require("../../utils/logger");
 
@@ -17,7 +17,7 @@ exports.uploadImage = async (req, res) => {
 
     const file = req.file;
     const ext = file.originalname.split(".").pop();
-    const fileName = `vehicles/${uuidv4()}.${ext}`;
+    const fileName = `vehicles/${crypto.randomUUID()}.${ext}`;
 
     const bucketName = process.env.AWS_BUCKET_NAME;
     const region = process.env.AWS_REGION;
