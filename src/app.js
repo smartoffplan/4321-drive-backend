@@ -24,8 +24,13 @@ const swaggerSpecs = require("./config/swagger");
 
 const app = express();
 
+// Trust proxy is needed for Cloud Run to correctly identify client IPs for rate limiting
+app.set("trust proxy", 1);
+
 // ─── Security ──────────────────────────────────────────────────────────────────
-app.use(helmet());
+app.use(helmet({
+  crossOriginResourcePolicy: false,
+}));
 const allowedOrigins = [
   env.CORS_ORIGIN,
   "http://localhost:3000",
