@@ -29,20 +29,17 @@ app.use(helmet());
 const allowedOrigins = [
   env.CORS_ORIGIN,
   "http://localhost:3000",
-  "http://127.0.0.1:3000",
-  "http://localhost:5130",
-  "http://127.0.0.1:5130",
   "http://localhost:8080",
-  "http://127.0.0.1:8080",
-  "https://drive-4321-backend-1647851889.me-central1.run.app",
   "https://4321-drive.vercel.app",
+  "https://drive-4321-backend-1647851889.me-central1.run.app",
 ];
 app.use(
   cors({
     origin: function (origin, callback) {
-      // allow requests with no origin (like mobile apps or curl requests)
       if (!origin) return callback(null, true);
-      if (allowedOrigins.indexOf(origin) === -1) {
+      // Clean up origin before comparison just in case
+      const incomingOrigin = origin.replace(/\/$/, "");
+      if (allowedOrigins.indexOf(incomingOrigin) === -1) {
         return callback(
           new Error(
             "The CORS policy for this site does not allow access from the specified Origin.",
@@ -53,6 +50,7 @@ app.use(
       return callback(null, true);
     },
     credentials: true,
+    optionsSuccessStatus: 200,
   }),
 );
 app.use(mongoSanitize());

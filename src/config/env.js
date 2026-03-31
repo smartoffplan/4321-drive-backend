@@ -15,7 +15,9 @@ const env = {
   JWT_ACCESS_EXPIRY: process.env.JWT_ACCESS_EXPIRY || "15m",
   JWT_REFRESH_EXPIRY: process.env.JWT_REFRESH_EXPIRY || "7d",
 
-  CORS_ORIGIN: process.env.CORS_ORIGIN || "http://localhost:3000",
+  CORS_ORIGIN: (process.env.CORS_ORIGIN || "http://localhost:3000")
+    .replace(/\/$/, "")
+    .trim(),
 
   SEED_SUPER_ADMIN_EMAIL:
     process.env.SEED_SUPER_ADMIN_EMAIL || "superadmin@4321drive.com",
