@@ -32,25 +32,22 @@ app.use(helmet({
   crossOriginResourcePolicy: false,
 }));
 const allowedOrigins = [
-  env.CORS_ORIGIN,
+  ...env.CORS_ORIGIN.split(",").map((o) => o.trim()),
   "http://localhost:3000",
   "http://localhost:8080",
   "https://4321-drive.vercel.app",
   "https://drive-4321-backend-1647851889.me-central1.run.app",
-];
+].map((o) => o?.toLowerCase().replace(/\/$/, ""));
+
 app.use(
   cors({
     origin: function (origin, callback) {
       if (!origin) return callback(null, true);
-      // Clean up origin before comparison just in case
-      const incomingOrigin = origin.replace(/\/$/, "");
+      // Clean up origin before comparison
+      const incomingOrigin = origin.toLowerCase().replace(/\/$/, "");
       if (allowedOrigins.indexOf(incomingOrigin) === -1) {
-        return callback(
-          new Error(
-            "The CORS policy for this site does not allow access from the specified Origin.",
-          ),
-          false,
-        );
+        logger.warn(`Rejected origin: ${incomingOrigin}`);
+        return callback(null, false); // Return false instead of Error for better browser behavior
       }
       return callback(null, true);
     },
