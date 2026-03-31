@@ -62,9 +62,6 @@ router.use(auth);
  *                   website_selling_price_per_day:
  *                     type: number
  *                     example: 2200
- *                   display_price_candidate_per_day:
- *                     type: number
- *                     example: 2200
  *                   weekly_price:
  *                     type: number
  *                     example: 14000

@@ -169,8 +169,27 @@ const parentVehicleSchema = new mongoose.Schema(
   },
   {
     timestamps: { createdAt: "created_at", updatedAt: "updated_at" },
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
   },
 );
+
+// Pre-save hook for dynamic public starting price
+parentVehicleSchema.pre("save", function () {
+  if (this.pricing_summary) {
+    const { display_price_mode, display_price_override, calculated_min_daily_price } =
+      this.pricing_summary;
+
+    if (
+      display_price_mode === PRICING_MODE.MANUAL_OVERRIDE &&
+      display_price_override != null
+    ) {
+      this.pricing_summary.public_starting_price = display_price_override;
+    } else {
+      this.pricing_summary.public_starting_price = calculated_min_daily_price;
+    }
+  }
+});
 
 // Indexes
 parentVehicleSchema.index({ brand: 1, model: 1, category: 1 });

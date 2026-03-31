@@ -32,7 +32,6 @@ const vehicleListingSchema = new mongoose.Schema(
     pricing: {
       vendor_base_price_per_day: { type: Number, default: null },
       website_selling_price_per_day: { type: Number, default: null },
-      display_price_candidate_per_day: { type: Number, default: null },
       weekly_price: { type: Number, default: null },
       monthly_price: { type: Number, default: null },
       future_price_fields: {

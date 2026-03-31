@@ -12,6 +12,9 @@ const publicVehiclesQuery = {
     brand: Joi.string().trim(),
     category: Joi.string().trim(),
     search: Joi.string().trim(),
+    location: Joi.string().trim(),
+    make: Joi.string().trim(),
+    is_featured: Joi.boolean(),
     sort_by: Joi.string().valid('sort_priority', 'price', 'created_at').default('sort_priority'),
     sort_order: Joi.string().valid('asc', 'desc').default('desc'),
   }),
@@ -61,6 +64,21 @@ const slugParam = {
  *         schema:
  *           type: string
  *         description: Search by name, brand, model, or tags
+ *       - in: query
+ *         name: location
+ *         schema:
+ *           type: string
+ *         description: Filter by location
+ *       - in: query
+ *         name: make
+ *         schema:
+ *           type: string
+ *         description: Filter by make/model
+ *       - in: query
+ *         name: is_featured
+ *         schema:
+ *           type: boolean
+ *         description: Filter for featured vehicles
  *       - in: query
  *         name: sort_by
  *         schema:

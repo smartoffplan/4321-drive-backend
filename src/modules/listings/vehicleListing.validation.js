@@ -10,7 +10,6 @@ const createListingSchema = {
     pricing: Joi.object({
       vendor_base_price_per_day: Joi.number().min(0).allow(null),
       website_selling_price_per_day: Joi.number().min(0).allow(null),
-      display_price_candidate_per_day: Joi.number().min(0).allow(null),
       weekly_price: Joi.number().min(0).allow(null),
       monthly_price: Joi.number().min(0).allow(null),
       future_price_fields: Joi.object({
@@ -48,7 +47,6 @@ const updateListingSchema = {
     pricing: Joi.object({
       vendor_base_price_per_day: Joi.number().min(0).allow(null),
       website_selling_price_per_day: Joi.number().min(0).allow(null),
-      display_price_candidate_per_day: Joi.number().min(0).allow(null),
       weekly_price: Joi.number().min(0).allow(null),
       monthly_price: Joi.number().min(0).allow(null),
       future_price_fields: Joi.object({

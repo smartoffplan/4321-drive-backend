@@ -7,7 +7,7 @@ class PublicService {
    * Only returns active vehicles with public-safe fields.
    */
   async getPublicVehicles(query) {
-    const { page = 1, limit = 20, brand, category, search, sort_by = 'sort_priority', sort_order = 'desc' } = query;
+    const { page = 1, limit = 20, brand, category, search, location, make, is_featured, sort_by = 'sort_priority', sort_order = 'desc' } = query;
     const skip = (page - 1) * limit;
 
     const filter = {
@@ -18,6 +18,12 @@ class PublicService {
 
     if (brand) filter.brand = { $regex: brand, $options: 'i' };
     if (category) filter.category = { $regex: category, $options: 'i' };
+    if (location) filter.location_default = { $regex: location, $options: 'i' };
+    if (make) filter.model = { $regex: make, $options: 'i' };
+    if (is_featured !== undefined) {
+      filter['display_settings.is_featured'] = is_featured === true || is_featured === 'true';
+    }
+
     if (search) {
       filter.$or = [
         { display_name: { $regex: search, $options: 'i' } },

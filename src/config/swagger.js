@@ -165,7 +165,6 @@ const swaggerOptions = {
               properties: {
                 vendor_base_price_per_day: { type: 'number', nullable: true },
                 website_selling_price_per_day: { type: 'number', nullable: true },
-                display_price_candidate_per_day: { type: 'number', nullable: true },
                 weekly_price: { type: 'number', nullable: true },
                 monthly_price: { type: 'number', nullable: true },
               },

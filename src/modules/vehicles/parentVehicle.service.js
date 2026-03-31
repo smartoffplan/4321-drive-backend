@@ -2,7 +2,7 @@ const slugify = require('slugify');
 const ParentVehicle = require('../../models/ParentVehicle');
 const VehicleListing = require('../../models/VehicleListing');
 const ApiError = require('../../utils/ApiError');
-const { PRICING_MODE, LISTING_STATUS } = require('../../config/constants');
+const { PRICING_MODE, LISTING_STATUS, APPROVAL_STATUS } = require('../../config/constants');
 
 class ParentVehicleService {
   /**
@@ -40,16 +40,8 @@ class ParentVehicleService {
       vehicle.pricing_summary.price_source_child_listing_id = cheapest._id;
     }
 
-    // Determine public starting price based on mode
-    const mode = vehicle.pricing_summary.display_price_mode;
-
-    if (mode === PRICING_MODE.MANUAL_OVERRIDE && vehicle.pricing_summary.display_price_override != null) {
-      vehicle.pricing_summary.public_starting_price = vehicle.pricing_summary.display_price_override;
-    } else {
-      vehicle.pricing_summary.public_starting_price = vehicle.pricing_summary.calculated_min_daily_price;
-    }
-
     await vehicle.save({ validateBeforeSave: false });
+
     return vehicle;
   }
 
@@ -61,6 +53,11 @@ class ParentVehicleService {
       slug,
       created_by: createdBy,
     });
+
+    if (data.pricing_summary) {
+      const recalculated = await this.recalculatePricing(vehicle._id);
+      return recalculated.toJSON();
+    }
 
     return vehicle.toJSON();
   }
@@ -83,7 +80,7 @@ class ParentVehicleService {
     }
 
     const sortObj = {};
-    if (sort_by === 'public_starting_price') {
+    if (sort_by === 'public_starting_price' || sort_by === 'price') {
       sortObj['pricing_summary.public_starting_price'] = sort_order === 'asc' ? 1 : -1;
     } else if (sort_by === 'sort_priority') {
       sortObj['display_settings.sort_priority'] = sort_order === 'asc' ? 1 : -1;
@@ -121,9 +118,17 @@ class ParentVehicleService {
     if (data.specs) data.specs = { ...vehicle.specs?.toObject?.() || {}, ...data.specs };
     if (data.display_settings) data.display_settings = { ...vehicle.display_settings?.toObject?.() || {}, ...data.display_settings };
     if (data.seo) data.seo = { ...vehicle.seo?.toObject?.() || {}, ...data.seo };
+    if (data.pricing_summary) {
+      data.pricing_summary = { ...vehicle.pricing_summary?.toObject?.() || {}, ...data.pricing_summary };
+    }
 
     Object.assign(vehicle, data, { updated_by: updatedBy });
     await vehicle.save();
+
+    // If pricing fields were provided, recalculate public starting price
+    if (data.pricing_summary) {
+      await this.recalculatePricing(id);
+    }
     return vehicle.toJSON();
   }
 

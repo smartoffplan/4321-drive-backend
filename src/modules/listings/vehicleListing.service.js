@@ -2,11 +2,11 @@ const VehicleListing = require('../../models/VehicleListing');
 const ParentVehicle = require('../../models/ParentVehicle');
 const Vendor = require('../../models/Vendor');
 const ApiError = require('../../utils/ApiError');
-const { LISTING_STATUS, APPROVAL_STATUS } = require('../../config/constants');
+const { LISTING_STATUS, APPROVAL_STATUS, ROLES } = require('../../config/constants');
 const parentVehicleService = require('../vehicles/parentVehicle.service');
 
 class VehicleListingService {
-  async create(data, createdBy) {
+  async create(data, user) {
     // Validate parent vehicle exists
     const parent = await ParentVehicle.findOne({ _id: data.parent_vehicle_id, deleted_at: null });
     if (!parent) throw ApiError.notFound('Parent vehicle not found');
@@ -15,10 +15,27 @@ class VehicleListingService {
     const vendor = await Vendor.findOne({ _id: data.vendor_id, deleted_at: null });
     if (!vendor) throw ApiError.notFound('Vendor not found');
 
-    const listing = await VehicleListing.create({
+    const listingData = {
       ...data,
-      created_by: createdBy,
-    });
+      created_by: user._id,
+    };
+
+    // Auto-approve if created by admin
+    if (user.role === ROLES.ADMIN || user.role === ROLES.SUPER_ADMIN) {
+      listingData.verification = {
+        is_verified: true,
+        verified_by_user_id: user._id,
+        verified_at: new Date(),
+        approval_status: APPROVAL_STATUS.APPROVED,
+        approval_notes: 'System auto-approved (Admin created)',
+      };
+      // If admin creates it, we can also default it to ACTIVE if requested
+      if (!listingData.availability_status) {
+        listingData.availability_status = LISTING_STATUS.ACTIVE;
+      }
+    }
+
+    const listing = await VehicleListing.create(listingData);
 
     // Recalculate parent pricing if listing is active
     if (listing.availability_status === LISTING_STATUS.ACTIVE) {

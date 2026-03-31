@@ -136,7 +136,6 @@ class ImportService {
           pricing: {
             vendor_base_price_per_day: row.vendor_base_price ? Number(row.vendor_base_price) : null,
             website_selling_price_per_day: row.selling_price ? Number(row.selling_price) : null,
-            display_price_candidate_per_day: row.display_price ? Number(row.display_price) : null,
             weekly_price: row.weekly_price ? Number(row.weekly_price) : null,
             monthly_price: row.monthly_price ? Number(row.monthly_price) : null,
           },

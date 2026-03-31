@@ -18,6 +18,7 @@ const vehicleListingRoutes = require("./modules/listings/vehicleListing.routes")
 const inquiryRoutes = require("./modules/inquiries/inquiry.routes");
 const importRoutes = require("./modules/imports/import.routes");
 const publicRoutes = require("./modules/public/public.routes");
+const uploadRoutes = require("./modules/upload/upload.routes");
 const swaggerUi = require("swagger-ui-express");
 const swaggerSpecs = require("./config/swagger");
 
@@ -87,6 +88,7 @@ app.use("/api/v1/vehicle-listings", vehicleListingRoutes);
 app.use("/api/v1/inquiries", inquiryRoutes);
 app.use("/api/v1/imports", importRoutes);
 app.use("/api/v1/public", publicRoutes);
+app.use("/api/v1/upload", uploadRoutes);
 
 // ─── 404 Handler ───────────────────────────────────────────────────────────────
 app.use((_req, res) => {

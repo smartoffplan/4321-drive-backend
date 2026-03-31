@@ -4,7 +4,7 @@ const asyncHandler = require('../../utils/asyncHandler');
 
 class VehicleListingController {
   create = asyncHandler(async (req, res) => {
-    const listing = await vehicleListingService.create(req.body, req.user._id);
+    const listing = await vehicleListingService.create(req.body, req.user);
     ApiResponse.created(res, 'Vehicle listing created successfully', listing);
   });
 
