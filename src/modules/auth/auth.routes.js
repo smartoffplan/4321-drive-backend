@@ -1,9 +1,13 @@
-const { Router } = require('express');
-const authController = require('./auth.controller');
-const auth = require('../../middleware/auth');
-const validate = require('../../middleware/validate');
-const { loginSchema, refreshSchema, registerSchema } = require('./auth.validation');
-const { authLimiter } = require('../../middleware/rateLimiter');
+const { Router } = require("express");
+const authController = require("./auth.controller");
+const auth = require("../../middleware/auth");
+const validate = require("../../middleware/validate");
+const {
+  loginSchema,
+  refreshSchema,
+  registerSchema,
+} = require("./auth.validation");
+const { authLimiter } = require("../../middleware/rateLimiter");
 
 const router = Router();
 
@@ -42,14 +46,19 @@ const router = Router();
  *                 example: mypassword123
  *               phone:
  *                 type: string
- *                 example: "+971501234567"
+ *                 example: "+971543218884"
  *     responses:
  *       201:
  *         description: Account created successfully
  *       409:
  *         description: User with this email already exists
  */
-router.post('/register', authLimiter, validate(registerSchema), authController.register);
+router.post(
+  "/register",
+  authLimiter,
+  validate(registerSchema),
+  authController.register,
+);
 
 /**
  * @swagger
@@ -79,7 +88,7 @@ router.post('/register', authLimiter, validate(registerSchema), authController.r
  *       401:
  *         description: Invalid email or password
  */
-router.post('/login', authLimiter, validate(loginSchema), authController.login);
+router.post("/login", authLimiter, validate(loginSchema), authController.login);
 
 /**
  * @swagger
@@ -105,7 +114,12 @@ router.post('/login', authLimiter, validate(loginSchema), authController.login);
  *       401:
  *         description: Invalid or expired refresh token
  */
-router.post('/refresh', authLimiter, validate(refreshSchema), authController.refresh);
+router.post(
+  "/refresh",
+  authLimiter,
+  validate(refreshSchema),
+  authController.refresh,
+);
 
 /**
  * @swagger
@@ -121,7 +135,7 @@ router.post('/refresh', authLimiter, validate(refreshSchema), authController.ref
  *       401:
  *         description: Unauthorized
  */
-router.post('/logout', auth, authController.logout);
+router.post("/logout", auth, authController.logout);
 
 /**
  * @swagger
@@ -146,6 +160,6 @@ router.post('/logout', auth, authController.logout);
  *       401:
  *         description: Unauthorized
  */
-router.get('/me', auth, authController.getMe);
+router.get("/me", auth, authController.getMe);
 
 module.exports = router;

@@ -1,6 +1,6 @@
-require('dotenv').config();
-const mongoose = require('mongoose');
-const Vendor = require('../src/models/Vendor');
+require("dotenv").config();
+const mongoose = require("mongoose");
+const Vendor = require("../src/models/Vendor");
 
 const run = async () => {
   try {
@@ -13,8 +13,8 @@ const run = async () => {
         company_name: "Dubai Elite Motors LLC",
         contact_person_name: "Ahmed Al Mansouri",
         company_phone: "+971 4 123 4567",
-        contact_person_phone: "+971 50 123 4567",
-        whatsapp_number: "+971 50 123 4567",
+        contact_person_phone: "+971 54 321 8884",
+        whatsapp_number: "+971 54 321 8884",
         contact_person_email: "ahmed@dubaielitemotors.ae",
         address_line_1: "Sheikh Zayed Road, Business Bay",
         city: "Dubai",
@@ -22,7 +22,7 @@ const run = async () => {
         status: "active",
         is_priority_vendor: true,
         priority_rank: 10,
-        notes: "Premium fleet provider in Business Bay."
+        notes: "Premium fleet provider in Business Bay.",
       },
       {
         vendor_type: "own_fleet",
@@ -35,7 +35,7 @@ const run = async () => {
         status: "active",
         is_priority_vendor: true,
         priority_rank: 100,
-        notes: "Our internal vehicles"
+        notes: "Our internal vehicles",
       },
       {
         vendor_type: "external_vendor",
@@ -113,7 +113,7 @@ const run = async () => {
     for (const v of vendors) {
       await Vendor.create(v);
     }
-    
+
     console.log("Seeded 8 vendors.");
     process.exit(0);
   } catch (err) {

@@ -1,10 +1,15 @@
-const { Router } = require('express');
-const userController = require('./user.controller');
-const auth = require('../../middleware/auth');
-const authorize = require('../../middleware/authorize');
-const validate = require('../../middleware/validate');
-const P = require('../../permissions/permissions');
-const { createAdminSchema, updateAdminSchema, getUsersQuerySchema, idParamSchema } = require('./user.validation');
+const { Router } = require("express");
+const userController = require("./user.controller");
+const auth = require("../../middleware/auth");
+const authorize = require("../../middleware/authorize");
+const validate = require("../../middleware/validate");
+const P = require("../../permissions/permissions");
+const {
+  createAdminSchema,
+  updateAdminSchema,
+  getUsersQuerySchema,
+  idParamSchema,
+} = require("./user.validation");
 
 const router = Router();
 
@@ -45,7 +50,7 @@ router.use(auth);
  *                 example: securepass123
  *               phone:
  *                 type: string
- *                 example: "+971501234567"
+ *                 example: "+971543218884"
  *               status:
  *                 type: string
  *                 enum: [active, inactive, suspended]
@@ -57,10 +62,10 @@ router.use(auth);
  *         description: Email already exists
  */
 router.post(
-  '/admins',
+  "/admins",
   authorize(P.USERS_CREATE_ADMIN),
   validate(createAdminSchema),
-  userController.createAdmin
+  userController.createAdmin,
 );
 
 /**
@@ -97,10 +102,10 @@ router.post(
  *         description: Admins retrieved successfully
  */
 router.get(
-  '/admins',
+  "/admins",
   authorize(P.USERS_READ),
   validate(getUsersQuerySchema),
-  userController.getAdmins
+  userController.getAdmins,
 );
 
 /**
@@ -124,10 +129,10 @@ router.get(
  *         description: Admin not found
  */
 router.get(
-  '/admins/:id',
+  "/admins/:id",
   authorize(P.USERS_READ),
   validate(idParamSchema),
-  userController.getAdminById
+  userController.getAdminById,
 );
 
 /**
@@ -168,10 +173,10 @@ router.get(
  *         description: Admin not found
  */
 router.patch(
-  '/admins/:id',
+  "/admins/:id",
   authorize(P.USERS_UPDATE_ADMIN),
   validate(updateAdminSchema),
-  userController.updateAdmin
+  userController.updateAdmin,
 );
 
 /**
@@ -195,10 +200,10 @@ router.patch(
  *         description: Admin not found
  */
 router.delete(
-  '/admins/:id',
+  "/admins/:id",
   authorize(P.USERS_DELETE_ADMIN),
   validate(idParamSchema),
-  userController.deleteAdmin
+  userController.deleteAdmin,
 );
 
 module.exports = router;
