@@ -5,16 +5,19 @@ const logger = require("./utils/logger");
 
 const startServer = async () => {
   try {
-    // Connect to MongoDB
-    await connectDB();
-
-    // Start Express server
+    // Start Express server FIRST (required for Cloud Run health check)
     const port = process.env.PORT || env.PORT || 8080;
     app.listen(port, () => {
       logger.info(
         `🚀 4321 Drive Backend running on port ${port} [${env.NODE_ENV}]`,
       );
       logger.info(`   Health: http://localhost:${port}/api/v1/health`);
+    });
+
+    // Connect to MongoDB in background (non-blocking)
+    connectDB().catch((error) => {
+      logger.error(`Failed to connect to MongoDB: ${error.message}`);
+      // App continues running; DB-dependent routes will fail gracefully
     });
   } catch (error) {
     logger.error("Failed to start server:", error);
