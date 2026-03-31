@@ -3,9 +3,23 @@ const express = require("express");
 const startServer = async () => {
   const port = process.env.PORT || 8080;
   const tempApp = express();
+  let startupError = null;
+  let isReady = false;
 
   // Create a minimal health check that works immediately
   tempApp.get("/api/v1/health", (req, res) => {
+    if (isReady) {
+      // This part should theoretically not be hit as we switch listeners
+      return res.status(200).json({ status: "Operational" });
+    }
+    if (startupError) {
+      return res.status(500).json({
+        status: "Failed",
+        error: startupError.message,
+        stack: startupError.stack,
+        timestamp: new Date().toISOString(),
+      });
+    }
     res
       .status(200)
       .json({ status: "Starting", timestamp: new Date().toISOString() });
@@ -21,7 +35,6 @@ const startServer = async () => {
 
       // Load dependencies after the port is already listening
       const app = require("./app");
-      const env = require("./config/env");
       const connectDB = require("./config/db");
       const logger = require("./utils/logger");
 
@@ -30,6 +43,7 @@ const startServer = async () => {
       // Switch the request handler from the temporary app to the real one
       server.removeAllListeners("request");
       server.on("request", app);
+      isReady = true;
 
       logger.info(`🚀 4321 Drive Backend is fully operational on port ${port}`);
 
@@ -40,6 +54,7 @@ const startServer = async () => {
     } catch (error) {
       console.error("🔥 FATAL ERROR DURING APPLICATION LOADING:");
       console.error(error.stack || error);
+      startupError = error;
       // We keep the server alive so that we can see these logs in the Cloud Run console
     }
   });
