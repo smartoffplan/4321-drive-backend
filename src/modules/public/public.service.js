@@ -77,6 +77,20 @@ class PublicService {
 
     return vehicle;
   }
+
+  /**
+   * Get single public vehicle by ID.
+   */
+  async getPublicVehicleById(id) {
+    const vehicle = await ParentVehicle.findOne({
+      _id: id,
+      public_status: PARENT_VEHICLE_STATUS.ACTIVE,
+      'display_settings.show_on_frontend': true,
+      deleted_at: null,
+    }).select('-created_by -updated_by -deleted_at -pricing_summary.display_price_mode -pricing_summary.display_price_override -pricing_summary.calculated_min_daily_price -pricing_summary.price_source_child_listing_id');
+
+    return vehicle;
+  }
 }
 
 module.exports = new PublicService();

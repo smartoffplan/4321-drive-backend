@@ -14,6 +14,12 @@ class PublicController {
     if (!vehicle) throw ApiError.notFound('Vehicle not found');
     ApiResponse.success(res, 'Vehicle retrieved', vehicle);
   });
+
+  getVehicleById = asyncHandler(async (req, res) => {
+    const vehicle = await publicService.getPublicVehicleById(req.params.id);
+    if (!vehicle) throw ApiError.notFound('Vehicle not found');
+    ApiResponse.success(res, 'Vehicle retrieved', vehicle);
+  });
 }
 
 module.exports = new PublicController();

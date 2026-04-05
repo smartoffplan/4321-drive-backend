@@ -1,7 +1,7 @@
-const { Router } = require('express');
-const Joi = require('joi');
-const publicController = require('./public.controller');
-const validate = require('../../middleware/validate');
+const { Router } = require("express");
+const Joi = require("joi");
+const publicController = require("./public.controller");
+const validate = require("../../middleware/validate");
 
 const router = Router();
 
@@ -15,13 +15,19 @@ const publicVehiclesQuery = {
     location: Joi.string().trim(),
     make: Joi.string().trim(),
     is_featured: Joi.boolean(),
-    sort_by: Joi.string().valid('sort_priority', 'price', 'created_at').default('sort_priority'),
-    sort_order: Joi.string().valid('asc', 'desc').default('desc'),
+    sort_by: Joi.string()
+      .valid("sort_priority", "price", "created_at")
+      .default("sort_priority"),
+    sort_order: Joi.string().valid("asc", "desc").default("desc"),
   }),
 };
 
 const slugParam = {
   params: Joi.object({ slug: Joi.string().required() }),
+};
+
+const idParam = {
+  params: Joi.object({ id: Joi.string().required() }),
 };
 
 /**
@@ -95,7 +101,37 @@ const slugParam = {
  *       200:
  *         description: Vehicles retrieved
  */
-router.get('/vehicles', validate(publicVehiclesQuery), publicController.getVehicles);
+router.get(
+  "/vehicles",
+  validate(publicVehiclesQuery),
+  publicController.getVehicles,
+);
+
+/**
+ * @swagger
+ * /public/vehicles/id/{id}:
+ *   get:
+ *     summary: Get public vehicle by ID
+ *     description: Returns a single active vehicle with public-safe fields only.
+ *     tags: [Public]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         example: 65f1a2b3c4d5e6f7a8b9c0d1
+ *     responses:
+ *       200:
+ *         description: Vehicle retrieved
+ *       404:
+ *         description: Vehicle not found
+ */
+router.get(
+  "/vehicles/id/:id",
+  validate(idParam),
+  publicController.getVehicleById,
+);
 
 /**
  * @swagger
@@ -117,6 +153,10 @@ router.get('/vehicles', validate(publicVehiclesQuery), publicController.getVehic
  *       404:
  *         description: Vehicle not found
  */
-router.get('/vehicles/:slug', validate(slugParam), publicController.getVehicleBySlug);
+router.get(
+  "/vehicles/:slug",
+  validate(slugParam),
+  publicController.getVehicleBySlug,
+);
 
 module.exports = router;
